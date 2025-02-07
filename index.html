@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Salario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffd8e8;
+            color: #ebebeb;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background-color: #de5183a5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 9px 10px rgba(255, 120, 190, 0.2);
+        }
+        label {
+            display: block;
+            margin: 8px 0 5px;
+            font-weight: bold;
+            text-align: left;
+        }
+        input {
+            width: 90%;
+            background-color: #e3e3e3;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+        button {
+            width: 60%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #a12458;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5f0c2e38;
+        }
+        .resultados {
+            margin-top: 20px;
+            text-align: center;
+            
+        }
+        .resultados p {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            border-bottom: 1px solid #7e174c;
+            padding: 8px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Planilla de Salario</h1>
+        <form id="formulario">
+            <div class="form-group">
+                <div>
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div>
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" required>
+                </div>
+                <div>
+                    <label for="cargo">Cargo:</label>
+                    <input type="text" id="cargo" required>
+                </div>
+            </div>
+
+            <label for="sueldo">Sueldo:</label>
+            <input type="number" id="sueldo" required>
+
+            <button type="submit">Calcular</button>
+        </form>
+
+        <div id="resultados" class="resultados">
+            <h2> Planilla</h2>
+            <p><strong>Nombre:</strong> <span id="resultado-nombre"></span></p>
+            <p><strong>Apellido:</strong> <span id="resultado-apellido"></span></p>
+            <p><strong>Cargo:</strong> <span id="resultado-cargo"></span></p>
+            <p><strong>Sueldo: $</strong><span id="resultado-sueldo"></span></p>
+            <p><strong>ISSS: $</strong> <span id="resultado-isss"></span></p>
+            <p><strong>AFP: $</strong> <span id="resultado-afp"></span></p>
+            <p><strong>Renta Imponible: $</strong> <span id="resultado-renta-imponible"></span></p>
+            <p><strong>ISR: $</strong> <span id="resultado-isr"></span></p>
+            <p><strong>Total de Retenciones: $</strong> <span id="resultado-retenciones"></span></p>
+            <p><strong>Salario Líquido: $</strong> <span id="resultado-salarioliquido"></span></p>
+            <h2>Retenciones Patronales</h2>
+            <p><strong>ISSS : $</strong> <span id="resultado-isssPatronal"></span></p>
+            <p><strong>AFP : $</strong> <span id="resultado-afpPatronal"></span></p>
+            <p><strong>TOTAL: $</strong> <span id="resultado-total"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formulario').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Obtener valores del formulario
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const cargo = document.getElementById('cargo').value;
+            const sueldo = parseFloat(document.getElementById('sueldo').value);
+
+            if (isNaN(sueldo) || sueldo <= 0) {
+                alert("Por favor ingrese un sueldo válido.");
+                return;
+            }
+
+            const isss = sueldo >= 1000 ? 30 : sueldo * 0.03;
+
+            const afp = sueldo * 0.0725;
+
+            const rentaImponible = sueldo - isss - afp;
+
+            let isr = 0;
+            if (rentaImponible > 2038.10) {
+                isr = ((rentaImponible - 2038.10) * 0.30) + 288.57;
+            } else if (rentaImponible > 895.24) {
+                isr = ((rentaImponible - 895.24) * 0.20) + 60;
+            } else if (rentaImponible > 472.00) {
+                isr = ((rentaImponible - 472.00) * 0.10) + 17.67;
+            }
+
+            const retenciones = isr + isss + afp;
+
+            const salarioliquido = rentaImponible - isr;
+
+            const isssPatronal = sueldo * 0.075;
+
+            const afpPatronal = sueldo * 0.0875;
+
+            const total =afpPatronal  + isssPatronal;
+
+
+            document.getElementById('resultado-nombre').textContent = nombre;
+            document.getElementById('resultado-apellido').textContent = apellido;
+            document.getElementById('resultado-cargo').textContent = cargo;
+            document.getElementById('resultado-sueldo').textContent = sueldo.toFixed(2);
+            document.getElementById('resultado-isss').textContent = isss.toFixed(2);
+            document.getElementById('resultado-afp').textContent = afp.toFixed(2);
+            document.getElementById('resultado-renta-imponible').textContent = rentaImponible.toFixed(2);
+            document.getElementById('resultado-isr').textContent = isr.toFixed(2);
+            document.getElementById('resultado-retenciones').textContent = retenciones.toFixed(2);
+            document.getElementById('resultado-salarioliquido').textContent = salarioliquido.toFixed(2);
+            document.getElementById('resultado-isssPatronal').textContent = isssPatronal.toFixed(2);
+            document.getElementById('resultado-afpPatronal').textContent = afpPatronal.toFixed(2);
+            document.getElementById('resultado-total').textContent = total.toFixed(2);
+
+            document.getElementById('resultados').style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>
