@@ -6,9 +6,10 @@
     <title>Tabla de Salario</title>
     <style>
         body {
+            body {
             font-family: Arial, sans-serif;
-            background-color: #ffd8e8;
-            color: #ebebeb;
+            background-color: #ffffff;
+            color: #333;
             margin: 0;
             padding: 20px;
             text-align: center;
@@ -16,10 +17,11 @@
         .container {
             max-width: 400px;
             margin: auto;
-            background-color: #de5183a5;
+            background-color: #ffffffc5;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 9px 10px rgba(255, 120, 190, 0.2);
+            border: 5px solid #146c43; /* Borde grueso verde */
         }
         label {
             display: block;
@@ -32,7 +34,7 @@
             background-color: #e3e3e3;
             padding: 8px;
             margin-bottom: 10px;
-            border: none;
+            border: 2px solid #146c43; /* Bordes verdes en los inputs */
             border-radius: 5px;
             font-size: 16px;
             text-align: center;
@@ -42,24 +44,28 @@
             padding: 15px;
             border: none;
             border-radius: 5px;
-            background-color: #a12458;
+            background-color: #3fe850;
             color: white;
             font-size: 16px;
+            
             cursor: pointer;
         }
         button:hover {
-            background-color: #5f0c2e38;
+            background-color: #2e9e40;
         }
         .resultados {
             margin-top: 20px;
             text-align: center;
-            
+            border: 4px solid #146c43; /* Borde grueso verde */
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f0fdf4;
         }
         .resultados p {
             display: flex;
             justify-content: space-between;
             font-size: 18px;
-            border-bottom: 1px solid #7e174c;
+            border-bottom: 1px solid #abcf48;
             padding: 8px 0;
         }
     </style>
@@ -96,16 +102,17 @@
             <p><strong>Apellido:</strong> <span id="resultado-apellido"></span></p>
             <p><strong>Cargo:</strong> <span id="resultado-cargo"></span></p>
             <p><strong>Sueldo: $</strong><span id="resultado-sueldo"></span></p>
-            <p><strong>ISSS: $</strong> <span id="resultado-isss"></span></p>
-            <p><strong>AFP: $</strong> <span id="resultado-afp"></span></p>
+            <p><strong>ISSS(3%): $</strong> <span id="resultado-isss"></span></p>
+            <p><strong>AFP:(7.25%) $</strong> <span id="resultado-afp"></span></p>
             <p><strong>Renta Imponible: $</strong> <span id="resultado-renta-imponible"></span></p>
             <p><strong>ISR: $</strong> <span id="resultado-isr"></span></p>
             <p><strong>Total de Retenciones: $</strong> <span id="resultado-retenciones"></span></p>
             <p><strong>Salario Líquido: $</strong> <span id="resultado-salarioliquido"></span></p>
             <h2>Retenciones Patronales</h2>
-            <p><strong>ISSS : $</strong> <span id="resultado-isssPatronal"></span></p>
-            <p><strong>AFP : $</strong> <span id="resultado-afpPatronal"></span></p>
-            <p><strong>TOTAL: $</strong> <span id="resultado-total"></span></p>
+            <p><strong>ISSS(7.5%) : $</strong> <span id="resultado-isssPatronal"></span></p>
+            <p><strong>AFP(8.75%) : $</strong> <span id="resultado-afpPatronal"></span></p>
+            <p><strong>TOTAL(ISSS): $</strong> <span id="resultado-totalisss"></span></p>
+            <p><strong>TOTAL(AFP): $</strong> <span id="resultado-totalafp"></span></p>
         </div>
     </div>
 
@@ -143,11 +150,14 @@
 
             const salarioliquido = rentaImponible - isr;
 
-            const isssPatronal = sueldo * 0.075;
+            const isssPatronal = sueldo >= 1000 ? 75 : sueldo * 0.075;
+            
 
             const afpPatronal = sueldo * 0.0875;
 
-            const total =afpPatronal  + isssPatronal;
+            const totalisss =isss  + isssPatronal;
+
+            const totalafp =afp  + afpPatronal;
 
 
             document.getElementById('resultado-nombre').textContent = nombre;
@@ -162,7 +172,8 @@
             document.getElementById('resultado-salarioliquido').textContent = salarioliquido.toFixed(2);
             document.getElementById('resultado-isssPatronal').textContent = isssPatronal.toFixed(2);
             document.getElementById('resultado-afpPatronal').textContent = afpPatronal.toFixed(2);
-            document.getElementById('resultado-total').textContent = total.toFixed(2);
+            document.getElementById('resultado-totalisss').textContent = totalisss.toFixed(2);
+            document.getElementById('resultado-totalafp').textContent = totalafp.toFixed(2);
 
             document.getElementById('resultados').style.display = 'block';
         });
